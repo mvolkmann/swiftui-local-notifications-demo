@@ -14,6 +14,7 @@ struct LocalNotification {
     var timeInterval: Double? // in seconds
     var repeats: Bool
     var userInfo: [AnyHashable: Any]?
+    var categoryIdentifier: String?
 
     init(
         identifier: String,

@@ -124,6 +124,8 @@ struct NotificationsListView: View {
                 notification.subtitle = "some subtitle"
                 // We cannot use the enum value instead of its rawValue.
                 notification.userInfo = ["nextView": NextView.promo.rawValue]
+                notification.categoryIdentifier = "snooze"
+
                 await lnManager.schedule(notification: notification)
             }
         }
