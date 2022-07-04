@@ -19,7 +19,7 @@ struct LocalNotification {
     var userInfo: [AnyHashable: Any]?
 
     // This describes buttons that should appear in a notification
-    // when it is long-tapped.
+    // when it is long-pressed.
     var categoryIdentifier: String?
 
     init(

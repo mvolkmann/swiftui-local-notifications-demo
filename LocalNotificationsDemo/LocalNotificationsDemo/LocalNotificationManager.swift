@@ -10,6 +10,7 @@ class LocalNotificationManager: NSObject, ObservableObject {
 
     override init() {
         super.init()
+
         // This allows presenting notifications scheduled by this app
         // while it is in the foreground.
         notificationCenter.delegate = self
@@ -21,7 +22,7 @@ class LocalNotificationManager: NSObject, ObservableObject {
         )
 
         // This defines a category of actions.
-        // When a notification that uses the category is long-tapped,
+        // When a notification that uses the category is long-pressed,
         // a button for each action is displayed.
         // See the timeIntervalButton computed property
         // in NotificationListView.swift which uses the category this defines.
@@ -116,8 +117,9 @@ extension LocalNotificationManager: UNUserNotificationCenterDelegate {
     // 1) The notification has a categoryIdentifier of "snooze".
     //    See the timeIntervalButton computed property
     //    in NotificationListView.swift.
-    // 2) The user long-taps on the notification.
-    // These buttons will be difficult for users to discover!
+    // 2) The user long-presses on the notification.
+    // These buttons will be difficult for users to discover, so include
+    // text in the notification that encourages users to long-press for options.
     func registerActions() {
         let snooze10Action = UNNotificationAction(
             identifier: "snooze10",
@@ -162,7 +164,7 @@ extension LocalNotificationManager: UNUserNotificationCenterDelegate {
             nextView = NextView(rawValue: value)
         }
 
-        // If the user long-tapped the notification and
+        // If the user long-presses the notification and
         // then tapped one of the snooze buttons ...
         let snoozeInterval: Double =
             response.actionIdentifier == "snooze10" ? 10 :

@@ -144,7 +144,7 @@ struct NotificationsListView: View {
                     timeInterval: 10,
                     repeats: false
                 )
-                notification.subtitle = "some subtitle"
+                notification.subtitle = "Long-press for options."
                 // We cannot use the enum value instead of its rawValue.
                 notification.userInfo = ["nextView": NextView.renew.rawValue]
 
