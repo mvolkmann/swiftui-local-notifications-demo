@@ -72,6 +72,25 @@ struct NotificationsListView: View {
         }
     }
 
+    var dailyButton: some View {
+        Button("Schedule Daily at 10 AM") {
+            let dateComponents = DateComponents(day: 1, hour: 10, minute: 0)
+            var notification = LocalNotification(
+                identifier: UUID().uuidString,
+                title: "10AM Notification",
+                body: "It's time for a promotion!",
+                dateComponents: dateComponents,
+                repeats: true
+            )
+            notification.userInfo = ["nextView": NextView.promo.rawValue]
+            Task {
+                await lnManager.schedule(notification: notification)
+            }
+        }
+    }
+
+    // This displays information about all the pending notifications.
+    // It is useful for debugging, but not for actually displaying for users.
     var pendingList: some View {
         GroupBox("Pending Notification Requests") {
             Button("Delete All", role: .destructive) {
@@ -104,7 +123,7 @@ struct NotificationsListView: View {
         GroupBox("Schedule Notifications") {
             timeIntervalButton
             calendarBox
-            Button("Location") {}
+            dailyButton
         }
         .buttonStyle(.bordered)
     }
@@ -123,7 +142,7 @@ struct NotificationsListView: View {
                 )
                 notification.subtitle = "some subtitle"
                 // We cannot use the enum value instead of its rawValue.
-                notification.userInfo = ["nextView": NextView.promo.rawValue]
+                notification.userInfo = ["nextView": NextView.renew.rawValue]
                 notification.categoryIdentifier = "snooze"
 
                 await lnManager.schedule(notification: notification)
