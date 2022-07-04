@@ -1,8 +1,9 @@
 import NotificationCenter
 
 @MainActor
-class LocalNotificationManager: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+class LocalNotificationManager: NSObject, ObservableObject {
     @Published var granted = false
+    @Published var nextView: NextView?
     @Published var pendingRequests: [UNNotificationRequest] = []
 
     let notificationCenter = UNUserNotificationCenter.current()
@@ -54,6 +55,9 @@ class LocalNotificationManager: NSObject, ObservableObject, UNUserNotificationCe
         }
         content.body = notification.body
         content.sound = .default
+        if let userInfo = notification.userInfo {
+            content.userInfo = userInfo
+        }
 
         let trigger: UNNotificationTrigger!
 
@@ -91,13 +95,25 @@ class LocalNotificationManager: NSObject, ObservableObject, UNUserNotificationCe
     func updatePendingRequests() async {
         pendingRequests = await notificationCenter.pendingNotificationRequests()
     }
+}
 
-    // This is required by the UNUserNotificationCenterDelegate protocol.
+extension LocalNotificationManager: UNUserNotificationCenterDelegate {
+
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
         await updatePendingRequests()
         return [.banner, .sound]
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        let content = response.notification.request.content
+        if let value = content.userInfo["nextView"] as? String {
+            nextView = NextView(rawValue: value)
+        }
     }
 }

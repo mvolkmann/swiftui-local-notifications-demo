@@ -13,6 +13,7 @@
 		1AB91AA62873454800B50796 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AB91AA52873454800B50796 /* Preview Assets.xcassets */; };
 		1AB91AAD2873469300B50796 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB91AAC2873469300B50796 /* LocalNotificationManager.swift */; };
 		1AB91AB028734FC700B50796 /* LocalNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB91AAF28734FC700B50796 /* LocalNotification.swift */; };
+		1AB91AB228736F6600B50796 /* NextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB91AB128736F6600B50796 /* NextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		1AB91AA52873454800B50796 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1AB91AAC2873469300B50796 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		1AB91AAF28734FC700B50796 /* LocalNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotification.swift; sourceTree = "<group>"; };
+		1AB91AB128736F6600B50796 /* NextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				1AB91AAF28734FC700B50796 /* LocalNotification.swift */,
+				1AB91AB128736F6600B50796 /* NextView.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AB91AB028734FC700B50796 /* LocalNotification.swift in Sources */,
+				1AB91AB228736F6600B50796 /* NextView.swift in Sources */,
 				1AB91AAD2873469300B50796 /* LocalNotificationManager.swift in Sources */,
 				1AB91AA12873454700B50796 /* NotificationsListView.swift in Sources */,
 				1AB91A9F2873454700B50796 /* LocalNotificationsDemoApp.swift in Sources */,

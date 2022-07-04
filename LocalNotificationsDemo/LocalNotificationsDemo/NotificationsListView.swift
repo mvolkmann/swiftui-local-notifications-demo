@@ -29,6 +29,9 @@ struct NotificationsListView: View {
                     }
                 }
             }
+            .sheet(item: $lnManager.nextView) { nextView in
+                nextView.view()
+            }
             .task {
                 try? await lnManager.authorize()
             }
@@ -119,6 +122,8 @@ struct NotificationsListView: View {
                     repeats: false
                 )
                 notification.subtitle = "some subtitle"
+                // We cannot use the enum value instead of its rawValue.
+                notification.userInfo = ["nextView": NextView.promo.rawValue]
                 await lnManager.schedule(notification: notification)
             }
         }

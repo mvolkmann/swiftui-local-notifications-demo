@@ -13,6 +13,7 @@ struct LocalNotification {
     var dateComponents: DateComponents?
     var timeInterval: Double? // in seconds
     var repeats: Bool
+    var userInfo: [AnyHashable: Any]?
 
     init(
         identifier: String,
