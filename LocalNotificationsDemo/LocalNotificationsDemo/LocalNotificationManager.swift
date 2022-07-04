@@ -49,12 +49,30 @@ class LocalNotificationManager: NSObject, ObservableObject, UNUserNotificationCe
     func schedule(notification: LocalNotification) async {
         let content = UNMutableNotificationContent()
         content.title = notification.title
+        if let subtitle = notification.subtitle {
+            content.subtitle = subtitle
+        }
         content.body = notification.body
         content.sound = .default
-        let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: notification.timeInterval,
-            repeats: notification.repeats
-        )
+
+        let trigger: UNNotificationTrigger!
+
+        switch notification.scheduleType {
+        case .calendar:
+            guard let dateComponents = notification.dateComponents else { return }
+            trigger = UNCalendarNotificationTrigger(
+                dateMatching: dateComponents,
+                repeats: notification.repeats
+            )
+
+        case .timeInterval:
+            guard let timeInterval = notification.timeInterval else { return }
+            trigger = UNTimeIntervalNotificationTrigger(
+                timeInterval: timeInterval,
+                repeats: notification.repeats
+            )
+        }
+
         let request = UNNotificationRequest(
             identifier: notification.identifier,
             content: content,

@@ -3,6 +3,7 @@ import SwiftUI
 struct NotificationsListView: View {
     @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var lnManager: LocalNotificationManager
+    @State private var scheduleDate = Date()
 
     var body: some View {
         NavigationView {
@@ -46,6 +47,28 @@ struct NotificationsListView: View {
         .padding()
     }
 
+    var calendarBox: some View {
+        GroupBox {
+            DatePicker("", selection: $scheduleDate).labelsHidden()
+            Button("Schedule at Calendar Date/Time") {
+                let dateComponents = Calendar.current.dateComponents(
+                    [.year, .month, .day, .hour, .minute],
+                    from: scheduleDate
+                )
+                let notification = LocalNotification(
+                    identifier: UUID().uuidString,
+                    title: "My Calendar Notification",
+                    body: "some body",
+                    dateComponents: dateComponents,
+                    repeats: false
+                )
+                Task {
+                    await lnManager.schedule(notification: notification)
+                }
+            }
+        }
+    }
+
     var pendingList: some View {
         GroupBox("Pending Notification Requests") {
             Button("Delete All", role: .destructive) {
@@ -76,24 +99,29 @@ struct NotificationsListView: View {
 
     var scheduleButtons: some View {
         GroupBox("Schedule Notifications") {
-            Button("Interval") {
-                Task {
-                    // If repeats is true then timeInterval
-                    // must be at least 60 seconds.
-                    let notification = LocalNotification(
-                        identifier: UUID().uuidString,
-                        title: "Some Title",
-                        body: "some body",
-                        timeInterval: 10,
-                        repeats: false
-                    )
-                    await lnManager.schedule(notification: notification)
-                }
-            }
-            Button("Calendar") {}
+            timeIntervalButton
+            calendarBox
             Button("Location") {}
         }
         .buttonStyle(.bordered)
+    }
+
+    var timeIntervalButton: some View {
+        Button("Schedule After Time Interval") {
+            Task {
+                // If repeats is true then timeInterval
+                // must be at least 60 seconds.
+                var notification = LocalNotification(
+                    identifier: UUID().uuidString,
+                    title: "My Time Interval Notification",
+                    body: "some body",
+                    timeInterval: 10,
+                    repeats: false
+                )
+                notification.subtitle = "some subtitle"
+                await lnManager.schedule(notification: notification)
+            }
+        }
     }
 }
 
