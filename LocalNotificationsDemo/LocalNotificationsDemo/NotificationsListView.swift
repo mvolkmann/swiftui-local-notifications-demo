@@ -15,6 +15,10 @@ struct NotificationsListView: View {
                     }
                     Spacer()
                 } else {
+                    // Display the following button if the user has never
+                    // granted this app permission to send notifications
+                    // or the user has opened the Settings app and
+                    // turned off notifications for this app.
                     Button("Enable Notifications") {
                         lnManager.openSettings()
                     }
@@ -143,6 +147,9 @@ struct NotificationsListView: View {
                 notification.subtitle = "some subtitle"
                 // We cannot use the enum value instead of its rawValue.
                 notification.userInfo = ["nextView": NextView.renew.rawValue]
+
+                // The "snooze" category is defined in registerActions method
+                // in LocalNotificationManager.swift.
                 notification.categoryIdentifier = "snooze"
 
                 await lnManager.schedule(notification: notification)

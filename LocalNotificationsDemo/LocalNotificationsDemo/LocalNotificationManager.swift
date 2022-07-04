@@ -19,7 +19,14 @@ class LocalNotificationManager: NSObject, ObservableObject {
         try await notificationCenter.requestAuthorization(
             options: [.alert, .badge, .sound]
         )
+
+        // This defines a category of actions.
+        // When a notification that uses the category is long-tapped,
+        // a button for each action is displayed.
+        // See the timeIntervalButton computed property
+        // in NotificationListView.swift which uses the category this defines.
         registerActions()
+
         await updateGranted()
     }
 
@@ -104,7 +111,13 @@ class LocalNotificationManager: NSObject, ObservableObject {
 
 extension LocalNotificationManager: UNUserNotificationCenterDelegate {
 
-    // Long tap on the notification to see these options.
+    // The actions described here will appear as buttons
+    // in a notification if:
+    // 1) The notification has a categoryIdentifier of "snooze".
+    //    See the timeIntervalButton computed property
+    //    in NotificationListView.swift.
+    // 2) The user long-taps on the notification.
+    // These buttons will be difficult for users to discover!
     func registerActions() {
         let snooze10Action = UNNotificationAction(
             identifier: "snooze10",
@@ -119,9 +132,14 @@ extension LocalNotificationManager: UNUserNotificationCenterDelegate {
             actions: [snooze10Action, snooze60Action],
             intentIdentifiers: []
         )
+        // The identifier values above become the value of the
+        // actionIdentifier property on the response object
+        // when the corresponding button is tapped.
         notificationCenter.setNotificationCategories([snoozeCategory])
     }
 
+    // This is called *before* each notification is displayed.
+    // It indicates *how* the user should be alerted.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
@@ -130,20 +148,29 @@ extension LocalNotificationManager: UNUserNotificationCenterDelegate {
         return [.banner, .sound]
     }
 
+    // This is called *after* each notification is displayed.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
         let content = response.notification.request.content
         if let value = content.userInfo["nextView"] as? String {
+            // nextView is a published property that is used
+            // in the "sheet" view modifier in NotificationsListView
+            // to display a specified view in a sheet.
+            // Alternatively, it could be used to navigate to a given view.
             nextView = NextView(rawValue: value)
         }
 
+        // If the user long-tapped the notification and
+        // then tapped one of the snooze buttons ...
         let snoozeInterval: Double =
             response.actionIdentifier == "snooze10" ? 10 :
             response.actionIdentifier == "snooze60" ? 60 :
             0
         if snoozeInterval != 0 {
+            // Create and schedule a new notification request
+            // that will notify the user again later.
             let content = response.notification.request.content
             let newContent = content.mutableCopy() as! UNMutableNotificationContent
             let newTrigger = UNTimeIntervalNotificationTrigger(

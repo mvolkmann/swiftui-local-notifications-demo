@@ -13,7 +13,13 @@ struct LocalNotification {
     var dateComponents: DateComponents?
     var timeInterval: Double? // in seconds
     var repeats: Bool
+
+    // This provides a way to pass data from a tapped notification
+    // to the app that created the notification.
     var userInfo: [AnyHashable: Any]?
+
+    // This describes buttons that should appear in a notification
+    // when it is long-tapped.
     var categoryIdentifier: String?
 
     init(
