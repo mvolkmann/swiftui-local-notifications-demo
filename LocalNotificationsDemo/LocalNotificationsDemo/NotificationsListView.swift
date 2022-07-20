@@ -78,7 +78,9 @@ struct NotificationsListView: View {
 
     var dailyButton: some View {
         Button("Schedule Daily at 10 AM") {
-            let dateComponents = DateComponents(day: 1, hour: 10, minute: 0)
+            let dateComponents = DateComponents(hour: 10)
+            // For testing, send a notification every minute at 10 seconds after the minute.
+            //let dateComponents = DateComponents(second: 10)
             var notification = LocalNotification(
                 identifier: UUID().uuidString,
                 title: "10AM Notification",
@@ -158,7 +160,7 @@ struct NotificationsListView: View {
     }
 }
 
-struct NotificatoinsListView_Previews: PreviewProvider {
+struct NotificationsListView_Previews: PreviewProvider {
     static var previews: some View {
         NotificationsListView()
             .environmentObject(LocalNotificationManager())
